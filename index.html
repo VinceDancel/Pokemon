@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Elite PokéDex Collection</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Montserrat", sans-serif;
+        background: #003a70;
+        color: #fff;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      .luxury-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            ellipse at 20% 30%,
+            rgba(255, 203, 5, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 80% 70%,
+            rgba(61, 125, 202, 0.2) 0%,
+            transparent 50%
+          ),
+          linear-gradient(180deg, #003a70 0%, #002347 100%);
+        z-index: 0;
+      }
+
+      .gold-particles {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .particle {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: linear-gradient(135deg, #ffcb05, #ffe066);
+        border-radius: 50%;
+        animation: float 15s infinite;
+        opacity: 0;
+        box-shadow: 0 0 10px rgba(255, 203, 5, 0.5);
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          opacity: 0;
+          transform: translateY(0) translateX(0);
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) translateX(50px);
+        }
+      }
+
+      .container {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        position: relative;
+        z-index: 2;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 60px;
+        position: relative;
+      }
+
+      .logo-container {
+        display: inline-block;
+        position: relative;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-family: "Cinzel", serif;
+        font-size: 4.5em;
+        font-weight: 700;
+        background: linear-gradient(
+          135deg,
+          #ffcb05 0%,
+          #ffe066 50%,
+          #ffcb05 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: 3px;
+        text-shadow: 0 0 30px rgba(255, 203, 5, 0.3);
+        animation: shimmer 3s infinite;
+        margin-bottom: 15px;
+      }
+
+      @keyframes shimmer {
+        0%,
+        100% {
+          filter: brightness(1);
+        }
+        50% {
+          filter: brightness(1.3);
+        }
+      }
+
+      .subtitle {
+        font-size: 1.1em;
+        color: #3d7dca;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 300;
+      }
+
+      .controls-section {
+        background: rgba(0, 58, 112, 0.6);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 203, 5, 0.3);
+        border-radius: 25px;
+        padding: 35px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(255, 203, 5, 0.1);
+      }
+
+      .search-bar {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+      }
+
+      input {
+        flex: 1;
+        min-width: 250px;
+        padding: 18px 30px;
+        background: rgba(0, 58, 112, 0.4);
+        border: 2px solid rgba(255, 203, 5, 0.4);
+        border-radius: 50px;
+        color: #fff;
+        font-size: 1em;
+        font-family: "Montserrat", sans-serif;
+        transition: all 0.4s ease;
+      }
+
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #ffcb05;
+        background: rgba(0, 58, 112, 0.6);
+        box-shadow: 0 0 25px rgba(255, 203, 5, 0.4);
+      }
+
+      button {
+        padding: 18px 40px;
+        background: linear-gradient(135deg, #ffcb05 0%, #ffe066 100%);
+        color: #003a70;
+        border: none;
+        border-radius: 50px;
+        font-size: 1em;
+        font-weight: 600;
+        font-family: "Montserrat", sans-serif;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        box-shadow: 0 5px 25px rgba(255, 203, 5, 0.4);
+        position: relative;
+        overflow: hidden;
+      }
+
+      button::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.4);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      button:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+
+      button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 35px rgba(255, 203, 5, 0.6);
+      }
+
+      .filter-buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .filter-btn {
+        padding: 12px 25px;
+        font-size: 0.9em;
+        background: rgba(61, 125, 202, 0.2);
+        border: 1px solid rgba(61, 125, 202, 0.4);
+        color: #3d7dca;
+        box-shadow: none;
+      }
+
+      .filter-btn:hover {
+        background: rgba(61, 125, 202, 0.4);
+        border-color: #3d7dca;
+        color: #fff;
+      }
+
+      .stats-bar {
+        display: flex;
+        justify-content: space-around;
+        gap: 30px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 2.5em;
+        font-weight: 600;
+        background: linear-gradient(135deg, #ffcb05, #ffe066);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .stat-label {
+        font-size: 0.9em;
+        color: #3d7dca;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+        animation: fadeIn 0.8s ease;
+      }
+
+      .pokemon-card {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 58, 112, 0.8) 0%,
+          rgba(0, 35, 71, 0.9) 100%
+        );
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 203, 5, 0.2);
+        border-radius: 20px;
+        padding: 25px;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .pokemon-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 203, 5, 0.15),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+
+      .pokemon-card:hover::before {
+        left: 100%;
+      }
+
+      .pokemon-card:hover {
+        transform: translateY(-15px) scale(1.03);
+        border-color: #ffcb05;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+          0 0 40px rgba(255, 203, 5, 0.4), inset 0 1px 0 rgba(255, 203, 5, 0.2);
+      }
+
+      .card-number {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-family: "Cinzel", serif;
+        font-size: 0.85em;
+        color: #ffcb05;
+        font-weight: 600;
+        background: rgba(255, 203, 5, 0.15);
+        padding: 5px 12px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 203, 5, 0.4);
+      }
+
+      .pokemon-image {
+        width: 180px;
+        height: 180px;
+        margin: 20px auto;
+        display: block;
+        filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
+        transition: all 0.5s ease;
+      }
+
+      .pokemon-card:hover .pokemon-image {
+        transform: scale(1.1) rotate(5deg);
+        filter: drop-shadow(0 15px 35px rgba(255, 203, 5, 0.4));
+      }
+
+      .pokemon-name {
+        font-family: "Cinzel", serif;
+        font-size: 1.6em;
+        color: #ffcb05;
+        text-align: center;
+        margin-bottom: 15px;
+        text-transform: capitalize;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      .pokemon-types {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .type-badge {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.75em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+      }
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-top: 1px solid rgba(255, 203, 5, 0.1);
+        font-size: 0.9em;
+      }
+
+      .info-label {
+        color: #3d7dca;
+        font-weight: 500;
+      }
+
+      .info-value {
+        color: #ffcb05;
+        font-weight: 600;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 100px 20px;
+        font-size: 1.8em;
+        color: #ffcb05;
+        font-family: "Cinzel", serif;
+        animation: pulse 2s infinite;
+      }
+
+      .load-more-btn {
+        display: block;
+        margin: 50px auto;
+        padding: 20px 60px;
+        font-size: 1.1em;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .modal-content {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 58, 112, 0.98) 0%,
+          rgba(0, 35, 71, 0.98) 100%
+        );
+        border: 2px solid rgba(255, 203, 5, 0.4);
+        border-radius: 30px;
+        max-width: 900px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 40px;
+        position: relative;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6),
+          0 0 60px rgba(255, 203, 5, 0.3);
+        animation: slideUp 0.4s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(220, 53, 69, 0.3);
+        border: 1px solid rgba(220, 53, 69, 0.5);
+        color: #dc3545;
+        font-size: 1.5em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        padding: 0;
+      }
+
+      .close-btn:hover {
+        background: rgba(220, 53, 69, 0.6);
+        color: #fff;
+        transform: rotate(90deg);
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        margin-bottom: 35px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid rgba(255, 203, 5, 0.3);
+      }
+
+      .modal-image {
+        width: 200px;
+        height: 200px;
+        filter: drop-shadow(0 15px 40px rgba(255, 203, 5, 0.4));
+      }
+
+      .modal-title-section {
+        flex: 1;
+      }
+
+      .modal-pokemon-name {
+        font-family: "Cinzel", serif;
+        font-size: 3em;
+        color: #ffcb05;
+        text-transform: capitalize;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .modal-pokemon-number {
+        font-family: "Cinzel", serif;
+        color: #3d7dca;
+        font-size: 1.3em;
+        margin-bottom: 15px;
+      }
+
+      .modal-section {
+        margin-bottom: 30px;
+      }
+
+      .section-title {
+        font-family: "Cinzel", serif;
+        font-size: 1.5em;
+        color: #ffcb05;
+        margin-bottom: 15px;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 25px;
+      }
+
+      .stat-item-modal {
+        background: rgba(61, 125, 202, 0.1);
+        padding: 15px;
+        border-radius: 15px;
+        border: 1px solid rgba(61, 125, 202, 0.3);
+      }
+
+      .stat-name-modal {
+        font-size: 0.9em;
+        color: #3d7dca;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+      }
+
+      .stat-value-modal {
+        font-size: 1.8em;
+        color: #ffcb05;
+        font-weight: 600;
+      }
+
+      .stat-bar-container {
+        margin-bottom: 15px;
+      }
+
+      .stat-bar-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 0.95em;
+      }
+
+      .stat-bar-name {
+        color: #3d7dca;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+      }
+
+      .stat-bar-value {
+        color: #ffcb05;
+        font-weight: 600;
+      }
+
+      .progress-bar {
+        height: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid rgba(218, 165, 32, 0.2);
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #daa520, #ffd700);
+        transition: width 0.8s ease;
+        box-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
+      }
+
+      .abilities-list {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .ability-badge {
+        padding: 10px 20px;
+        background: rgba(218, 165, 32, 0.15);
+        border: 1px solid rgba(218, 165, 32, 0.3);
+        border-radius: 25px;
+        color: #daa520;
+        font-weight: 500;
+        text-transform: capitalize;
+        font-size: 0.95em;
+      }
+
+      .moves-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 15px;
+      }
+
+      .move-item {
+        padding: 8px 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(218, 165, 32, 0.2);
+        border-radius: 20px;
+        color: #ccc;
+        font-size: 0.85em;
+        text-align: center;
+        text-transform: capitalize;
+      }
+
+      .moves-grid::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .moves-grid::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+      }
+
+      .moves-grid::-webkit-scrollbar-thumb {
+        background: rgba(218, 165, 32, 0.5);
+        border-radius: 10px;
+      }
+
+      .moves-grid::-webkit-scrollbar-thumb:hover {
+        background: rgba(218, 165, 32, 0.7);
+      }
+
+      /* Type Colors - Luxury Edition */
+      .type-normal {
+        background: linear-gradient(135deg, #a8a878, #c0c0a8);
+      }
+      .type-fire {
+        background: linear-gradient(135deg, #f08030, #ff9966);
+      }
+      .type-water {
+        background: linear-gradient(135deg, #6890f0, #88a8ff);
+      }
+      .type-electric {
+        background: linear-gradient(135deg, #f8d030, #ffd966);
+        color: #000;
+      }
+      .type-grass {
+        background: linear-gradient(135deg, #78c850, #90e070);
+      }
+      .type-ice {
+        background: linear-gradient(135deg, #98d8d8, #b0f0f0);
+      }
+      .type-fighting {
+        background: linear-gradient(135deg, #c03028, #e04040);
+      }
+      .type-poison {
+        background: linear-gradient(135deg, #a040a0, #c060c0);
+      }
+      .type-ground {
+        background: linear-gradient(135deg, #e0c068, #f0d088);
+        color: #000;
+      }
+      .type-flying {
+        background: linear-gradient(135deg, #a890f0, #c0b0ff);
+      }
+      .type-psychic {
+        background: linear-gradient(135deg, #f85888, #ff78a8);
+      }
+      .type-bug {
+        background: linear-gradient(135deg, #a8b820, #c0d040);
+      }
+      .type-rock {
+        background: linear-gradient(135deg, #b8a038, #d0c058);
+      }
+      .type-ghost {
+        background: linear-gradient(135deg, #705898, #9078b8);
+      }
+      .type-dragon {
+        background: linear-gradient(135deg, #7038f8, #9060ff);
+      }
+      .type-dark {
+        background: linear-gradient(135deg, #705848, #907868);
+      }
+      .type-steel {
+        background: linear-gradient(135deg, #b8b8d0, #d0d0e8);
+        color: #000;
+      }
+      .type-fairy {
+        background: linear-gradient(135deg, #ee99ac, #ffb0c0);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.7;
+          transform: scale(1.05);
+        }
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5em;
+        }
+        .gallery-grid {
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+          gap: 20px;
+        }
+        .search-bar {
+          flex-direction: column;
+        }
+        input,
+        button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="luxury-bg"></div>
+    <div class="gold-particles" id="particles"></div>
+
+    <div class="container">
+      <header>
+        <div class="logo-container">
+          <h1>✦ ELITE POKÉDEX ✦</h1>
+        </div>
+        <p class="subtitle">The Premier Pokémon Collection</p>
+      </header>
+
+      <div class="controls-section">
+        <div class="search-bar">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search by name or number..."
+          />
+          <button id="searchBtn">Search Collection</button>
+        </div>
+
+        <div class="stats-bar">
+          <div class="stat-item">
+            <div class="stat-number" id="totalCount">0</div>
+            <div class="stat-label">Total Pokémon</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="displayedCount">0</div>
+            <div class="stat-label">Currently Displayed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="generationCount">9</div>
+            <div class="stat-label">Generations</div>
+          </div>
+        </div>
+
+        <div class="filter-buttons">
+          <button class="filter-btn" onclick="filterGeneration(1)">
+            Gen I
+          </button>
+          <button class="filter-btn" onclick="filterGeneration(2)">
+            Gen II
+          </button>
+          <button class="filter-btn" onclick="filterGeneration(3)">
+            Gen III
+          </button>
+          <button class="filter-btn" onclick="filterGeneration(4)">
+            Gen IV
+          </button>
+          <button class="filter-btn" onclick="filterGeneration(5)">
+            Gen V
+          </button>
+          <button class="filter-btn" onclick="loadAllPokemon()">
+            View All
+          </button>
+        </div>
+      </div>
+
+      <div id="gallery" class="gallery-grid"></div>
+      <button id="loadMoreBtn" class="load-more-btn" style="display: none">
+        Load More Pokémon
+      </button>
+    </div>
+
+    <script>
+      let allPokemon = [];
+      let displayedPokemon = [];
+      let currentOffset = 0;
+      const limit = 20;
+
+      // Create floating particles
+      function createParticles() {
+        const container = document.getElementById("particles");
+        for (let i = 0; i < 30; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+          particle.style.left = Math.random() * 100 + "%";
+          particle.style.animationDelay = Math.random() * 15 + "s";
+          particle.style.animationDuration = Math.random() * 10 + 10 + "s";
+          container.appendChild(particle);
+        }
+      }
+
+      createParticles();
+
+      async function loadAllPokemon() {
+        const gallery = document.getElementById("gallery");
+        gallery.innerHTML =
+          '<div class="loading">⚜ Curating Elite Collection ⚜</div>';
+
+        try {
+          const response = await fetch(
+            "https://pokeapi.co/api/v2/pokemon?limit=151"
+          );
+          const data = await response.json();
+
+          document.getElementById("totalCount").textContent = data.count;
+
+          const pokemonPromises = data.results.map((pokemon) =>
+            fetch(pokemon.url).then((res) => res.json())
+          );
+
+          allPokemon = await Promise.all(pokemonPromises);
+          displayedPokemon = allPokemon;
+          displayPokemon(displayedPokemon);
+        } catch (error) {
+          gallery.innerHTML =
+            '<div class="loading">⚠ Unable to access collection</div>';
+        }
+      }
+
+      function displayPokemon(pokemonList) {
+        const gallery = document.getElementById("gallery");
+        gallery.innerHTML = "";
+
+        document.getElementById("displayedCount").textContent =
+          pokemonList.length;
+
+        pokemonList.forEach((pokemon) => {
+          const types = pokemon.types
+            .map(
+              (t) =>
+                `<span class="type-badge type-${t.type.name}">${t.type.name}</span>`
+            )
+            .join("");
+
+          const imageUrl =
+            pokemon.sprites.other["official-artwork"].front_default ||
+            pokemon.sprites.front_default;
+
+          const card = document.createElement("div");
+          card.className = "pokemon-card";
+          card.innerHTML = `
+          <div class="card-number">#${pokemon.id
+            .toString()
+            .padStart(4, "0")}</div>
+          <img src="${imageUrl}" alt="${pokemon.name}" class="pokemon-image" />
+          <h2 class="pokemon-name">${pokemon.name}</h2>
+          <div class="pokemon-types">${types}</div>
+          <div class="info-row">
+            <span class="info-label">Height</span>
+            <span class="info-value">${(pokemon.height / 10).toFixed(1)}m</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Weight</span>
+            <span class="info-value">${(pokemon.weight / 10).toFixed(
+              1
+            )}kg</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Base Experience</span>
+            <span class="info-value">${
+              pokemon.base_experience || "Unknown"
+            }</span>
+          </div>
+        `;
+
+          card.addEventListener("click", () => showPokemonModal(pokemon));
+
+          gallery.appendChild(card);
+        });
+      }
+
+      function showPokemonModal(pokemon) {
+        const types = pokemon.types
+          .map(
+            (t) =>
+              `<span class="type-badge type-${t.type.name}">${t.type.name}</span>`
+          )
+          .join("");
+
+        const imageUrl =
+          pokemon.sprites.other["official-artwork"].front_default ||
+          pokemon.sprites.front_default;
+
+        const stats = pokemon.stats
+          .map((s) => {
+            const percentage = Math.min((s.base_stat / 255) * 100, 100);
+            return `
+          <div class="stat-bar-container">
+            <div class="stat-bar-label">
+              <span class="stat-bar-name">${s.stat.name}</span>
+              <span class="stat-bar-value">${s.base_stat}</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${percentage}%"></div>
+            </div>
+          </div>
+        `;
+          })
+          .join("");
+
+        const abilities = pokemon.abilities
+          .map(
+            (a) =>
+              `<span class="ability-badge">${a.ability.name.replace(
+                "-",
+                " "
+              )}</span>`
+          )
+          .join("");
+
+        const moves = pokemon.moves
+          .slice(0, 20)
+          .map(
+            (m) =>
+              `<div class="move-item">${m.move.name.replace("-", " ")}</div>`
+          )
+          .join("");
+
+        const totalStats = pokemon.stats.reduce(
+          (sum, s) => sum + s.base_stat,
+          0
+        );
+        const avgStat = Math.round(totalStats / pokemon.stats.length);
+
+        const modal = document.createElement("div");
+        modal.className = "modal-overlay";
+        modal.innerHTML = `
+        <div class="modal-content">
+          <button class="close-btn">×</button>
+          
+          <div class="modal-header">
+            <img src="${imageUrl}" alt="${pokemon.name}" class="modal-image" />
+            <div class="modal-title-section">
+              <h2 class="modal-pokemon-name">${pokemon.name}</h2>
+              <div class="modal-pokemon-number">#${pokemon.id
+                .toString()
+                .padStart(4, "0")}</div>
+              <div class="pokemon-types">${types}</div>
+            </div>
+          </div>
+
+          <div class="modal-section">
+            <h3 class="section-title">⚜ Physical Attributes ⚜</h3>
+            <div class="stats-grid">
+              <div class="stat-item-modal">
+                <div class="stat-name-modal">Height</div>
+                <div class="stat-value-modal">${(pokemon.height / 10).toFixed(
+                  1
+                )}m</div>
+              </div>
+              <div class="stat-item-modal">
+                <div class="stat-name-modal">Weight</div>
+                <div class="stat-value-modal">${(pokemon.weight / 10).toFixed(
+                  1
+                )}kg</div>
+              </div>
+              <div class="stat-item-modal">
+                <div class="stat-name-modal">Base Experience</div>
+                <div class="stat-value-modal">${
+                  pokemon.base_experience || "N/A"
+                }</div>
+              </div>
+              <div class="stat-item-modal">
+                <div class="stat-name-modal">Average Stat</div>
+                <div class="stat-value-modal">${avgStat}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-section">
+            <h3 class="section-title">⚜ Base Statistics ⚜</h3>
+            ${stats}
+          </div>
+
+          <div class="modal-section">
+            <h3 class="section-title">⚜ Abilities ⚜</h3>
+            <div class="abilities-list">${abilities}</div>
+          </div>
+
+          <div class="modal-section">
+            <h3 class="section-title">⚜ Notable Moves (First 20) ⚜</h3>
+            <div class="moves-grid">${moves}</div>
+          </div>
+        </div>
+      `;
+
+        document.body.appendChild(modal);
+
+        modal.querySelector(".close-btn").addEventListener("click", () => {
+          modal.remove();
+        });
+
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) {
+            modal.remove();
+          }
+        });
+      }
+
+      function filterGeneration(gen) {
+        const ranges = {
+          1: [1, 151],
+          2: [152, 251],
+          3: [252, 386],
+          4: [387, 493],
+          5: [494, 649],
+        };
+
+        const [start, end] = ranges[gen];
+        displayedPokemon = allPokemon.filter(
+          (p) => p.id >= start && p.id <= end
+        );
+        displayPokemon(displayedPokemon);
+      }
+
+      document.getElementById("searchBtn").addEventListener("click", () => {
+        const query = document
+          .getElementById("searchInput")
+          .value.trim()
+          .toLowerCase();
+        if (query) {
+          const filtered = allPokemon.filter(
+            (p) => p.name.includes(query) || p.id.toString() === query
+          );
+          displayedPokemon = filtered;
+          displayPokemon(filtered);
+        }
+      });
+
+      document
+        .getElementById("searchInput")
+        .addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            document.getElementById("searchBtn").click();
+          }
+        });
+
+      // Load initial collection
+      window.addEventListener("load", () => {
+        loadAllPokemon();
+      });
+    </script>
+  </body>
+</html>
